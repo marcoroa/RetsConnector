@@ -73,9 +73,9 @@ namespace CrestApps.RetsConnector
 
                     // Assuming you know the type of the returned data, you can cast the values like so
                     // Of cource you must know that the column is int type befor eyou call this
-                    // int castedToIntValue = value.Get<int>(); 
+                    // int castedToIntValue = value.Get<int>();
                     // you can also do something like
-                    // int? castedToIntValue = value.GetNullable<int>(); 
+                    // int? castedToIntValue = value.GetNullable<int>();
                     // DateTime? castedToIntValue = value.GetNullable<DateTime>();
                     // you can also check if the value is restricted like this
                     bool restrictedValue = value.IsRestricted;

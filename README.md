@@ -1,6 +1,6 @@
 # CrestApps RetsSdk
 
-.NET Core 3 based client library for interacting with a RETS server to pull real estate listings, photos, and other data made available from an MLS system.
+.NET 6 based client library for interacting with a RETS server to pull real estate listings, photos, and other data made available from an MLS system.
 
 Although this library has been tested with version 1.7.2 using digest authentication, it should work for versions 1.5, 1.7, 1.7.1, 1.7.2 and 1.8 using basic or digest authentication.
 

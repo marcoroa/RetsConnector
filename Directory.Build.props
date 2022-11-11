@@ -10,16 +10,8 @@
 		<Authors>CrestApps</Authors>
 		<Company>CrestApps.com</Company>
 		<Copyright>CrestApps 2019</Copyright>
-		<Description>CrestApps RetsSdk a .NET Core client library for interacting with a RETS server to pull real estate listings, photos and other data made available from an MLS system.</Description>
-		<RepositoryType>git</RepositoryType>
-		<Version>1.0.1</Version>
-		<PackageTags>RETS CrestApps MLS real estate listings Mike Alhayek Alhayek</PackageTags>
-		<PackageId>CrestApps.RetsSdk</PackageId>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://www.crestapps.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/CrestApps/RetsConnector</RepositoryUrl>
-		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-		<GeneratePackageOnBuild Condition=" '$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/CrestApps/RetsConnector</RepositoryUrl>
 	</PropertyGroup>
 
     <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj'">

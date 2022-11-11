@@ -15,11 +15,9 @@
 		<Version>1.0.1</Version>
 		<PackageTags>RETS CrestApps MLS real estate listings Mike Alhayek Alhayek</PackageTags>
 		<PackageId>CrestApps.RetsSdk</PackageId>
-		<PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://www.crestapps.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/CrestApps/RetsConnector</RepositoryUrl>
-		<PackageIconUrl>https://avatars1.githubusercontent.com/u/24724371?s=460&amp;v=4</PackageIconUrl>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
 	</PropertyGroup>

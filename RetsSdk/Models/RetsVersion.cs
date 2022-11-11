@@ -11,7 +11,7 @@ namespace CrestApps.RetsSdk.Models
         public RetsVersion(SupportedRetsVersion retsVersion)
         {
             this.retVersion = retsVersion;
-            string version = ExtractVersionNumber(retsVersion);
+            string version = ExtractVersionNumber(this.retVersion);
 
             this.Load(version);
         }

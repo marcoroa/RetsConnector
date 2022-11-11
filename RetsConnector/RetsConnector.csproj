@@ -4,7 +4,7 @@
 		<AssemblyName>CrestApps.RetsConnector</AssemblyName>
 		<RootNamespace>CrestApps.RetsConnector</RootNamespace>
 		<OutputType>Exe</OutputType>
-		<IsPackable>true</IsPackable>
+        <IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>

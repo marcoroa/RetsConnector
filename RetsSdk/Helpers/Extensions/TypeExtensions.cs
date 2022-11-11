@@ -181,7 +181,7 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
         {
             if (!closedType.IsGenericType)
             {
-                return null;
+                return Array.Empty<Type>();
             }
 
             Type openType = closedType.GetGenericTypeDefinition();

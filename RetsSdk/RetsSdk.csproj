@@ -3,6 +3,7 @@
   <PropertyGroup>
 	  <AssemblyName>CrestApps.RetsSdk</AssemblyName>
 	  <RootNamespace>CrestApps.RetsSdk</RootNamespace>
+	  <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
-﻿using System;
-
 namespace CrestApps.RetsSdk.Exceptions
 {
+    using System;
+
     public class TooManyOutstandingRequests : Exception
     {
         public TooManyOutstandingRequests()

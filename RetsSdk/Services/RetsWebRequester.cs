@@ -1,15 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using CrestApps.RetsSdk.Models;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-
 namespace CrestApps.RetsSdk.Services
 {
+    using System;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text;
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Models;
+    using Microsoft.Extensions.Options;
+
     public class RetsWebRequester : IRetsRequester
     {
         private readonly ConnectionOptions Options;
@@ -17,14 +16,13 @@ namespace CrestApps.RetsSdk.Services
 
         public RetsWebRequester(IOptions<ConnectionOptions> options, IHttpClientFactory httpClientFactory)
         {
-            Options = options.Value;
-            HttpClientFactory = httpClientFactory;
+            this.Options = options.Value;
+            this.HttpClientFactory = httpClientFactory;
         }
-
 
         public async Task Get(Uri uri, Action<HttpResponseMessage> action, SessionResource resource = null, bool ensureSuccessStatusCode = true)
         {
-            using (var client = GetClient(resource))
+            using (var client = this.GetClient(resource))
             {
                 var response = await client.GetAsync(uri);
 
@@ -37,9 +35,10 @@ namespace CrestApps.RetsSdk.Services
             }
         }
 
-        public async Task<T> Get<T>(Uri uri, Func<HttpResponseMessage, Task<T>> action, SessionResource resource = null, bool ensureSuccessStatusCode = true) where T : class
+        public async Task<T> Get<T>(Uri uri, Func<HttpResponseMessage, Task<T>> action, SessionResource resource = null, bool ensureSuccessStatusCode = true)
+            where T : class
         {
-            using (var client = GetClient(resource))
+            using (var client = this.GetClient(resource))
             {
                 var response = await client.GetAsync(uri);
 
@@ -52,19 +51,18 @@ namespace CrestApps.RetsSdk.Services
             }
         }
 
-
         public async Task Get(Uri uri, SessionResource resource = null, bool ensureSuccessStatusCode = true)
         {
-            await Get(uri, null, resource, ensureSuccessStatusCode);
+            await this.Get(uri, null, resource, ensureSuccessStatusCode);
         }
 
         protected virtual HttpClient GetClient(SessionResource resource)
         {
-            HttpClient client = GetAuthenticatedClient();
+            HttpClient client = this.GetAuthenticatedClient();
 
-            client.Timeout = Options.Timeout;
-            client.DefaultRequestHeaders.Add("User-Agent", Options.UserAgent);
-            client.DefaultRequestHeaders.Add("RETS-Version", Options.Version.AsHeader());
+            client.Timeout = this.Options.Timeout;
+            client.DefaultRequestHeaders.Add("User-Agent", this.Options.UserAgent);
+            client.DefaultRequestHeaders.Add("RETS-Version", this.Options.Version.AsHeader());
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip");
             client.DefaultRequestHeaders.Add("Accept", "*/*");
 
@@ -83,17 +81,17 @@ namespace CrestApps.RetsSdk.Services
 
         private HttpClient GetAuthenticatedClient()
         {
-            if (Options.Type == Models.Enums.AuthenticationType.Digest)
+            if (this.Options.Type == Models.Enums.AuthenticationType.Digest)
             {
                 var credCache = new CredentialCache();
-                credCache.Add(new Uri(Options.LoginUrl), Options.Type.ToString(), new NetworkCredential(Options.Username, Options.Password));
+                credCache.Add(new Uri(this.Options.LoginUrl), this.Options.Type.ToString(), new NetworkCredential(this.Options.Username, this.Options.Password));
 
                 return new HttpClient(new HttpClientHandler { Credentials = credCache });
             }
 
-            HttpClient client = HttpClientFactory.CreateClient();
+            HttpClient client = this.HttpClientFactory.CreateClient();
 
-            byte[] byteArray = Encoding.ASCII.GetBytes($"{Options.Username}:{Options.Password}");
+            byte[] byteArray = Encoding.ASCII.GetBytes($"{this.Options.Username}:{this.Options.Password}");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
             return client;

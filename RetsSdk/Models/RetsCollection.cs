@@ -1,15 +1,16 @@
-﻿using CrestApps.RetsSdk.Contracts;
-using CrestApps.RetsSdk.Helpers.Extensions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Xml.Linq;
-
 namespace CrestApps.RetsSdk.Models
 {
-    public abstract class RetsCollection<T> : IMetadataCollection, IMetadataCollectionLoad, IRetsCollectionXElementLoader, IMetadataCollection<T> where T : class, new()
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Reflection;
+    using System.Xml.Linq;
+    using CrestApps.RetsSdk.Contracts;
+    using CrestApps.RetsSdk.Helpers.Extensions;
+
+    public abstract class RetsCollection<T> : IMetadataCollection, IMetadataCollectionLoad, IRetsCollectionXElementLoader, IMetadataCollection<T>
+        where T : class, new()
     {
         public string Version { get; set; }
         public DateTime Date { get; set; }
@@ -24,49 +25,49 @@ namespace CrestApps.RetsSdk.Models
                 return;
             }
 
-            Items.Add(item);
+            this.Items.Add(item);
         }
 
         public IEnumerable<T> Get()
         {
-            return Items;
+            return this.Items;
         }
 
         public Type GetGenericType()
         {
-            if (_Type == null)
+            if (this._Type == null)
             {
-                _Type = typeof(T);
+                this._Type = typeof(T);
             }
 
-            return _Type;
+            return this._Type;
         }
 
-        public void Remove(T item)
+        public void Remove(T resource)
         {
-            if (item == null)
+            if (resource == null)
             {
                 return;
             }
 
-            Items.Remove(item);
+            this.Items.Remove(resource);
         }
 
-        public void Load(Type type, XElement xElement)
+        public void Load(Type collectionType, XElement xElement)
         {
-            if (type == null)
+            if (collectionType is null)
             {
-                throw new NullReferenceException("{type} cannot be null");
+                throw new ArgumentNullException(nameof(collectionType));
             }
 
-            if (xElement == null)
+            if (xElement is null)
             {
-                throw new NullReferenceException("{xElement} cannot be null");
+                throw new ArgumentNullException(nameof(xElement));
             }
 
             // First, we check all attributes on the XElement
             // for any attribute that match the element, we would set the value accordingly.
-            foreach (PropertyInfo property in type.GetProperties())
+            foreach (PropertyInfo property in collectionType.GetProperties())
             {
                 var attribute = xElement.Attribute(property.Name);
 
@@ -81,18 +82,12 @@ namespace CrestApps.RetsSdk.Models
             // Second, foreach child in the XElement's children, we need to cast it into the generic model then add it to the collection
             foreach (XElement child in xElement.Elements())
             {
-                Add(child);
+                this.Add(child);
             }
         }
 
-
-        private void Add(XElement element)
-        {
-            T model = Cast(element);
-
-            Add(model);
-        }
-
+        public abstract void Load(XElement xElement);
+        public abstract T Get(object value);
 
         protected T Cast(XElement element)
         {
@@ -101,7 +96,6 @@ namespace CrestApps.RetsSdk.Models
             XElement parent = element.Parent;
 
             IEnumerable<PropertyInfo> properties = typeof(T).GetProperties();
-
 
             // Set the entity properites using the current attributes
             foreach (PropertyInfo property in properties)
@@ -124,13 +118,13 @@ namespace CrestApps.RetsSdk.Models
                 if (attribute != null)
                 {
                     SetValueSafely(entity, property, attribute.Value);
-                }                
+                }
             }
 
             // First, foreach child on the given XElement object, find a propery with the same name as the child's localname and set its value accordingly
             foreach (XElement child in element.Elements())
             {
-                PropertyInfo property = GetGenericType().GetProperty(child.Name.LocalName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                PropertyInfo property = this.GetGenericType().GetProperty(child.Name.LocalName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
                 if (property == null)
                 {
@@ -164,10 +158,8 @@ namespace CrestApps.RetsSdk.Models
                 IRetsCollectionXElementLoader newCollection = (IRetsCollectionXElementLoader)Activator.CreateInstance(subCollection.PropertyType);
                 newCollection.Load(metaDataNode);
 
-
                 subCollection.SetValue(entity, newCollection, null);
             }
-
 
             return entity;
         }
@@ -179,8 +171,11 @@ namespace CrestApps.RetsSdk.Models
             property.SetValue(entity, safeValue, null);
         }
 
-        public abstract void Load(XElement xElement);
-        public abstract T Get(object value);
+        private void Add(XElement element)
+        {
+            T model = this.Cast(element);
 
+            this.Add(model);
+        }
     }
 }

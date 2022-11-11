@@ -1,43 +1,43 @@
-﻿using CrestApps.RetsSdk.Helpers;
-using CrestApps.RetsSdk.Models.Enums;
-using System;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using CrestApps.RetsSdk.Helpers;
+    using CrestApps.RetsSdk.Models.Enums;
+
     public class RetsVersion : Version
     {
         private SupportedRetsVersion RetVersion;
 
         public RetsVersion(SupportedRetsVersion retsVersion)
         {
-            RetVersion = retsVersion;
+            this.RetVersion = retsVersion;
             string version = ExtractVersionNumber(retsVersion);
 
-            Load(version);
+            this.Load(version);
         }
 
         public string AsHeader()
         {
-            return $"RETS/{ToString()}";
+            return $"RETS/{this.ToString()}";
         }
 
         public override string ToString()
         {
             string version = string.Empty;
 
-            if (!Major.HasValue)
+            if (!this.Major.HasValue)
             {
-                throw new NullReferenceException($"The {Major} value cannot be null.");
+                throw new NullReferenceException($"The {this.Major} value cannot be null.");
             }
 
-            if (!Minor.HasValue)
+            if (!this.Minor.HasValue)
             {
-                throw new NullReferenceException($"The {Major} value cannot be null.");
+                throw new NullReferenceException($"The {this.Major} value cannot be null.");
             }
 
-            if (!Patch.HasValue)
+            if (!this.Patch.HasValue)
             {
-                return $"{Major}.{Minor}";
+                return $"{this.Major}.{this.Minor}";
             }
 
             return base.ToString();
@@ -56,6 +56,5 @@ namespace CrestApps.RetsSdk.Models
 
             return Enum.Parse<SupportedRetsVersion>(castable);
         }
-
     }
 }

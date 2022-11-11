@@ -1,10 +1,10 @@
-﻿using CrestApps.RetsSdk.Services;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Services;
+
     public class RetsResource
     {
         public string ResourceId { get; set; }
@@ -38,22 +38,21 @@ namespace CrestApps.RetsSdk.Models
 
         public async Task<RetsClassCollection> GetClasses(IRetsClient session)
         {
-            if (Classes == null)
+            if (this.Classes == null)
             {
-                Classes = await session.GetClassesMetadata(ResourceId);
+                this.Classes = await session.GetClassesMetadata(this.ResourceId);
             }
 
-            return Classes;
+            return this.Classes;
         }
 
         public async Task<RetsClass> GetClass(IRetsClient session, string className)
         {
-            var _classes = await GetClasses(session);
+            var _classes = await this.GetClasses(session);
 
             RetsClass _class = _classes.Get().FirstOrDefault(x => x.ClassName.Equals(className, StringComparison.CurrentCultureIgnoreCase));
 
             return _class;
         }
-
     }
 }

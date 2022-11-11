@@ -1,10 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Xml.Linq;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Xml.Linq;
+
     [Description("METADATA-LOOKUP_TYPE")]
     public class RetsLookupTypeCollection : RetsCollection<RetsLookupType>
     {
@@ -13,12 +13,12 @@ namespace CrestApps.RetsSdk.Models
 
         public override void Load(XElement xElement)
         {
-            Load(GetType(), xElement);
+            this.Load(this.GetType(), xElement);
         }
 
         public override RetsLookupType Get(object value)
         {
-            RetsLookupType item = Get().FirstOrDefault(x => x.ShortValue.Equals(value.ToString(), StringComparison.CurrentCultureIgnoreCase));
+            RetsLookupType item = this.Get().FirstOrDefault(x => x.ShortValue.Equals(value.ToString(), StringComparison.CurrentCultureIgnoreCase));
 
             return item;
         }

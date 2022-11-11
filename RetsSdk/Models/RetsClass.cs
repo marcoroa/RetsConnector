@@ -1,9 +1,9 @@
-﻿using CrestApps.RetsSdk.Services;
-using System;
-using System.Threading.Tasks;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Services;
+
     public class RetsClass
     {
         public string Resource { get; set; }
@@ -20,13 +20,12 @@ namespace CrestApps.RetsSdk.Models
 
         public async Task<RetsFieldCollection> GetFields(IRetsClient session)
         {
-            if (Fields == null)
+            if (this.Fields == null)
             {
-                Fields = await session.GetTableMetadata(Resource, ClassName);
+                this.Fields = await session.GetTableMetadata(this.Resource, this.ClassName);
             }
 
-            return Fields;
+            return this.Fields;
         }
-
     }
 }

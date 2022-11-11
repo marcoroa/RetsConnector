@@ -1,10 +1,10 @@
-﻿using CrestApps.RetsSdk.Exceptions;
-using CrestApps.RetsSdk.Models.Enums;
-using System;
-using System.Collections.Generic;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using CrestApps.RetsSdk.Exceptions;
+    using CrestApps.RetsSdk.Models.Enums;
+
     public class SessionResource
     {
         public string SessionId { get; set; }
@@ -14,30 +14,29 @@ namespace CrestApps.RetsSdk.Models
 
         public SessionResource()
         {
-            Capabilities = new Dictionary<Capability, Uri>();
+            this.Capabilities = new Dictionary<Capability, Uri>();
         }
 
-        public void AddCapability(Capability name, string url)
+        public void AddCapability(Capability name, string url, UriKind uriType)
         {
             var uri = new Uri(url);
 
-            if (Capabilities.ContainsKey(name) || !uri.IsWellFormedOriginalString())
+            if (this.Capabilities.ContainsKey(name) || !uri.IsWellFormedOriginalString())
             {
                 return;
             }
-            
-            Capabilities.TryAdd(name, uri);
+
+            this.Capabilities.TryAdd(name, uri);
         }
 
         public Uri GetCapability(Capability name)
         {
-            if(!Capabilities.ContainsKey(name))
+            if (!this.Capabilities.ContainsKey(name))
             {
                 throw new MissingCapabilityException();
             }
 
-            return Capabilities[name];
+            return this.Capabilities[name];
         }
-
     }
 }

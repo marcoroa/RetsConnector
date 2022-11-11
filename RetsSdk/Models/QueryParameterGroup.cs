@@ -1,20 +1,21 @@
-﻿using CrestApps.RetsSdk.Models.Enums;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using CrestApps.RetsSdk.Models.Enums;
+
     public class QueryParameterGroup
     {
+        public QueryParameterGroup()
+        {
+            this.Parameters = new List<QueryParameter>();
+        }
+
         public QueryParameterLogicalOperator LogicalOperator { get; set; }
+
         public List<QueryParameter> Parameters { get; set; }
 
         public QueryParameterGroup Group { get; set; }
-
-        public QueryParameterGroup()
-        {
-            Parameters = new List<QueryParameter>();
-        }
 
         public void AddParameter(params QueryParameter[] parameters)
         {
@@ -25,27 +26,26 @@ namespace CrestApps.RetsSdk.Models
 
             foreach (var parameter in parameters)
             {
-                Parameters.Add(parameter);
+                this.Parameters.Add(parameter);
             }
         }
 
-
         public override string ToString()
         {
-            if(Parameters == null || !Parameters.Any())
+            if (this.Parameters == null || !this.Parameters.Any())
             {
                 return null;
             }
 
             string glue = ",";
-            if(LogicalOperator == QueryParameterLogicalOperator.Or)
+            if (this.LogicalOperator == QueryParameterLogicalOperator.Or)
             {
                 glue = "|";
             }
 
-            var parameters = Parameters.Select(x => x.ToString()).Where(x => !string.IsNullOrWhiteSpace(x));
+            var parameters = this.Parameters.Select(x => x.ToString()).Where(x => !string.IsNullOrWhiteSpace(x));
 
-            string subGroup = Group?.ToString();
+            string subGroup = this.Group?.ToString();
             if (!string.IsNullOrWhiteSpace(subGroup))
             {
                 return string.Format("({0}{1}{2})", string.Join(glue, parameters), glue, subGroup);

@@ -1,8 +1,8 @@
-﻿using CrestApps.RetsSdk.Models;
-using System.Threading.Tasks;
-
 namespace CrestApps.RetsSdk.Services
 {
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Models;
+
     public interface IRetsSession
     {
         Task<bool> Start();

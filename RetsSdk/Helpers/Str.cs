@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-
 namespace CrestApps.RetsSdk.Helpers
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
     public class Str
     {
         public static string GetValue(string startWith, string[] lines, char splitter = '=')
@@ -116,9 +116,7 @@ namespace CrestApps.RetsSdk.Helpers
                 default:
                     return num + "th";
             }
-
         }
-
 
         public static string Truncate(string value, int maxLength)
         {
@@ -168,7 +166,6 @@ namespace CrestApps.RetsSdk.Helpers
 
             return subject;
         }
-
 
         public static int CountOccurrences(string text, string pattern)
         {
@@ -227,7 +224,6 @@ namespace CrestApps.RetsSdk.Helpers
 
             return orginal + toAppend;
         }
-
 
         public static string PrependOnce(string orginal, string toAppend = "/")
         {

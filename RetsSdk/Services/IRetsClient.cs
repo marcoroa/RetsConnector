@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using CrestApps.RetsSdk.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace CrestApps.RetsSdk.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Models;
+
     public interface IRetsClient
     {
         Task Connect();

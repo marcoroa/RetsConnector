@@ -1,30 +1,28 @@
-﻿namespace CrestApps.RetsSdk.Models
+namespace CrestApps.RetsSdk.Models
 {
     public class PhotoId
     {
-        public long Id { get; set; }
-        public int? ObjectId { get; set; }
-
         public PhotoId()
         {
-
         }
 
-        public PhotoId(long id, int? objectId = null)
+        public PhotoId(string id, int? objectId = null)
         {
-            Id = id;
-            ObjectId = objectId;
+            this.Id = id;
+            this.ObjectId = objectId;
         }
 
+        public string Id { get; set; }
+        public int? ObjectId { get; set; }
 
         public override string ToString()
         {
-            if (!ObjectId.HasValue)
+            if (!this.ObjectId.HasValue)
             {
-                return string.Format("{0}:*", Id);
+                return string.Format("{0}:*", this.Id);
             }
 
-            return string.Format("{0}:{1}", Id, ObjectId.Value);
+            return string.Format("{0}:{1}", this.Id, this.ObjectId.Value);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace CrestApps.RetsSdk.Models
+namespace CrestApps.RetsSdk.Models
 {
     public class QueryParameter
     {
@@ -7,23 +7,22 @@
 
         public QueryParameter()
         {
-
         }
 
         public QueryParameter(string fieldName, string value)
         {
-            FieldName = fieldName;
-            Value = value;
+            this.FieldName = fieldName;
+            this.Value = value;
         }
 
         public override string ToString()
         {
-            if (string.IsNullOrWhiteSpace(FieldName))
+            if (string.IsNullOrWhiteSpace(this.FieldName))
             {
                 return string.Empty;
             }
 
-            return string.Format("({0}={1})", FieldName, Value);
+            return string.Format("({0}={1})", this.FieldName, this.Value);
         }
     }
 }

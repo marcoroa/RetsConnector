@@ -7,6 +7,6 @@
         SqFt,
         SqMeters,
         Acres,
-        Hectares
+        Hectares,
     }
 }

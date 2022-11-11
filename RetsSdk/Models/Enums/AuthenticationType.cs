@@ -3,6 +3,6 @@
     public enum AuthenticationType
     {
         Basic,
-        Digest
+        Digest,
     }
 }

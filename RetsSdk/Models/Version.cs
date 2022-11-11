@@ -1,8 +1,8 @@
-﻿using CrestApps.RetsSdk.Exceptions;
-using System;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using CrestApps.RetsSdk.Exceptions;
+
     public class Version
     {
         public int? Major { get; set; }
@@ -12,48 +12,47 @@ namespace CrestApps.RetsSdk.Models
 
         public Version()
         {
-
         }
         public Version(string version, char wildCard = '*')
         {
-            WildCard = wildCard;
-            Load(version);
+            this.WildCard = wildCard;
+            this.Load(version);
         }
 
         public void Load(string version)
         {
-            string[] parts = GetVersionParts(version);
+            string[] parts = this.GetVersionParts(version);
             int totalParts = parts.Length;
 
-            Major = ParseValue(parts[0]);
-            Minor = ParseValue(parts[1]);
+            this.Major = this.ParseValue(parts[0]);
+            this.Minor = this.ParseValue(parts[1]);
 
             if (totalParts == 3)
             {
-                Patch = ParseValue(parts[2]);
+                this.Patch = this.ParseValue(parts[2]);
             }
         }
 
         public Version(int? major)
         {
-            Major = major;
+            this.Major = major;
         }
 
         public Version(int? major, int? minor)
-            :this(major)
+            : this(major)
         {
-            Minor = minor;
+            this.Minor = minor;
         }
 
         public Version(int? major, int? minor, int? patch)
             : this(major, minor)
         {
-            Patch = patch;
+            this.Patch = patch;
         }
 
         public override string ToString()
         {
-            return $"{Major ?? WildCard}.{Minor ?? WildCard}.{Patch ?? WildCard}";
+            return $"{this.Major ?? this.WildCard}.{this.Minor ?? this.WildCard}.{this.Patch ?? this.WildCard}";
         }
 
         protected virtual string[] GetVersionParts(string version)
@@ -63,7 +62,7 @@ namespace CrestApps.RetsSdk.Models
                 throw new ArgumentNullException($"{nameof(version)} cannot be null.");
             }
 
-            string[] parts = version.Replace('_','.').Split('.');
+            string[] parts = version.Replace('_', '.').Split('.');
             int totalParts = parts.Length;
             if (totalParts == 0 || totalParts > 3)
             {
@@ -76,7 +75,7 @@ namespace CrestApps.RetsSdk.Models
         protected virtual int? ParseValue(string part)
         {
 
-            if (string.IsNullOrWhiteSpace(part) || part.Equals(WildCard.ToString()))
+            if (string.IsNullOrWhiteSpace(part) || part.Equals(this.WildCard.ToString()))
             {
                 return default(int?);
             }

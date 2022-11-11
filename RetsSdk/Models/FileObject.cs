@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net.Mime;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.IO;
+    using System.Net.Mime;
+
     public class FileObject : IDisposable
     {
         public string ContentId { get; set; }
@@ -16,44 +16,47 @@ namespace CrestApps.RetsSdk.Models
         public bool IsPreferred { get; set; }
         public string Extension { get; set; }
         public Stream Content { get; set; }
+
         private bool IsDisposed;
 
-        public bool IsImage => ContentType?.MediaType.StartsWith("image", StringComparison.CurrentCultureIgnoreCase) ?? false;
+        public bool IsImage => this.ContentType?.MediaType.StartsWith("image", StringComparison.CurrentCultureIgnoreCase) ?? false;
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         public void SetStream(Stream stream)
         {
-            Content = stream;
+            this.Content = stream;
 
             if (stream != null)
             {
-                Content.Position = 0;
+                this.Content.Position = 0;
             }
         }
 
         public Stream GetStream()
         {
-            return Content;
+            return this.Content;
         }
 
         // Protected implementation of Dispose pattern.
         protected virtual void Dispose(bool disposing)
         {
-            if (IsDisposed)
-                return;
-
-            if (disposing && Content != null)
+            if (this.IsDisposed)
             {
-                Content.Close();
-                Content.Dispose();
+                return;
             }
 
-            IsDisposed = true;
+            if (disposing && this.Content != null)
+            {
+                this.Content.Close();
+                this.Content.Dispose();
+            }
+
+            this.IsDisposed = true;
         }
     }
 }

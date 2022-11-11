@@ -1,6 +1,6 @@
 ﻿namespace CrestApps.RetsSdk.Models
 {
-    public  class RetsLookupType
+    public class RetsLookupType
     {
         public string MetadataEntryId { get; set; }
         public string LongValue { get; set; }

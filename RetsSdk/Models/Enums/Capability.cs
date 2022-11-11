@@ -1,4 +1,4 @@
-﻿namespace CrestApps.RetsSdk.Models.Enums
+namespace CrestApps.RetsSdk.Models.Enums
 {
     public enum Capability
     {
@@ -8,6 +8,6 @@
         GetMetadata,
         GetObject,
         Update,
-        PostObject
+        PostObject,
     }
 }

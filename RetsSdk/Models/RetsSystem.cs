@@ -1,7 +1,7 @@
-﻿using System;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+
     public class RetsSystem
     {
         public string Version { get; set; }

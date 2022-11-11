@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class SearchRequest
     {
         public string SearchType { get; set; }
@@ -19,24 +19,24 @@ namespace CrestApps.RetsSdk.Models
 
         public SearchRequest()
         {
-            ParameterGroup = new QueryParameterGroup();
+            this.ParameterGroup = new QueryParameterGroup();
         }
 
         public SearchRequest(string resourceName, string className)
             : this()
         {
-            SearchType = resourceName;
-            Class = className;
+            this.SearchType = resourceName;
+            this.Class = className;
         }
 
         public void AddColumn(string columnName)
         {
-            if (string.IsNullOrWhiteSpace(columnName) || Columns.Contains(columnName, StringComparer.CurrentCultureIgnoreCase))
+            if (string.IsNullOrWhiteSpace(columnName) || this.Columns.Contains(columnName, StringComparer.CurrentCultureIgnoreCase))
             {
                 return;
             }
 
-            Columns.Add(columnName);
+            this.Columns.Add(columnName);
         }
 
         public void AddColumns(IEnumerable<string> columnNames)
@@ -48,36 +48,35 @@ namespace CrestApps.RetsSdk.Models
 
             foreach (var columnName in columnNames)
             {
-                AddColumn(columnName);
+                this.AddColumn(columnName);
             }
         }
 
         public void RemoveColumn(string columnName)
         {
-            Columns = Columns.Where(x => x != columnName).ToList();
+            this.Columns = this.Columns.Where(x => x != columnName).ToList();
         }
 
         public void RemoveColumns(IEnumerable<string> columnNames)
         {
-            Columns = Columns.Where(x => !columnNames.Contains(x)).ToList();
+            this.Columns = this.Columns.Where(x => !columnNames.Contains(x)).ToList();
         }
 
         public bool HasColumns()
         {
-            return Columns.Any();
+            return this.Columns.Any();
         }
-
 
         public bool HasColumn(string columnName)
         {
-            bool exists = Columns.Any(x => x.Equals(columnName, StringComparison.CurrentCultureIgnoreCase));
+            bool exists = this.Columns.Any(x => x.Equals(columnName, StringComparison.CurrentCultureIgnoreCase));
 
             return exists;
         }
 
         public IEnumerable<string> GetColumns()
         {
-            return Columns.Distinct();
+            return this.Columns.Distinct();
         }
     }
 }

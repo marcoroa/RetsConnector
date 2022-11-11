@@ -1,4 +1,4 @@
-﻿namespace CrestApps.RetsSdk.Models
+namespace CrestApps.RetsSdk.Models
 {
     public class SearchResultValue
     {

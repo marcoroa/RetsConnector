@@ -1,10 +1,10 @@
-﻿using CrestApps.RetsSdk.Models.Enums;
-using CrestApps.RetsSdk.Services;
-using System;
-using System.Threading.Tasks;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Models.Enums;
+    using CrestApps.RetsSdk.Services;
+
     public class RetsField
     {
         public string MetadataEntryId { get; set; }
@@ -38,12 +38,12 @@ namespace CrestApps.RetsSdk.Models
 
         public async Task<RetsLookupTypeCollection> GetLookupTypes(IRetsClient session, string resourceId)
         {
-            if (LookupTypes == null && Interpretation.StartsWith("Lookup", StringComparison.CurrentCultureIgnoreCase))
+            if (this.LookupTypes == null && this.Interpretation.StartsWith("Lookup", StringComparison.CurrentCultureIgnoreCase))
             {
-                LookupTypes = await session.GetLookupValues(resourceId, SystemName);
+                this.LookupTypes = await session.GetLookupValues(resourceId, this.SystemName);
             }
 
-            return LookupTypes;
+            return this.LookupTypes;
         }
     }
 }

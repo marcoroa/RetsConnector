@@ -11,6 +11,6 @@
         Small,
         Int,
         Long,
-        Decimal
+        Decimal,
     }
 }

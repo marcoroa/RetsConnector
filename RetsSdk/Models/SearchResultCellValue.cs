@@ -1,107 +1,102 @@
-﻿using CrestApps.RetsSdk.Helpers.Extensions;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using CrestApps.RetsSdk.Helpers.Extensions;
+
     public class SearchResultCellValue
     {
         public bool IsPrimaryKeyValue { get; private set; }
-        public bool IsRestricted  { get; private set; }
+        public bool IsRestricted { get; private set; }
         private string Value { get; set; }
 
         public SearchResultCellValue(string value)
         {
-            Value = value;
+            this.Value = value;
         }
 
         public void SetIsPrimaryKeyValue(bool isPrimaryKeyValue)
         {
-            IsPrimaryKeyValue = isPrimaryKeyValue;
+            this.IsPrimaryKeyValue = isPrimaryKeyValue;
         }
 
         public void SetIsRestricted(bool isRestricted)
         {
-            IsRestricted = isRestricted;
+            this.IsRestricted = isRestricted;
         }
 
         public void SetIsRestricted(string restrectedValue)
         {
-            IsRestricted = Value?.Equals(restrectedValue) ?? false;
+            this.IsRestricted = this.Value?.Equals(restrectedValue) ?? false;
         }
 
         public string NullOrValue()
         {
-            if(IsNullOrWhiteSpace())
+            if (this.IsNullOrWhiteSpace())
             {
                 return null;
             }
 
-            return Value;
+            return this.Value;
         }
 
         public string EmptyOrValue()
         {
-            return Value ?? string.Empty;
+            return this.Value ?? string.Empty;
         }
-
 
         public string Get()
         {
-            return Value;
+            return this.Value;
         }
 
         public string GetTrimmed()
         {
-            return Value?.Trim();
+            return this.Value?.Trim();
         }
 
         public T Get<T>()
           where T : struct
         {
-            return TryCastValue<T>();
+            return this.TryCastValue<T>();
         }
 
         public T? GetNullable<T>()
             where T : struct
         {
-            return TryCastValueNullable<T>();
+            return this.TryCastValueNullable<T>();
         }
-
-
 
         public T? TryCastValueNullable<T>()
             where T : struct
         {
-            if(IsNullOrWhiteSpace())
+            if (this.IsNullOrWhiteSpace())
             {
                 return null;
             }
 
-            return TryCastValue<T>();
+            return this.TryCastValue<T>();
         }
-
 
         public T TryCastValue<T>()
              where T : struct
         {
-            object safeValue = typeof(T).GetSafeObject(Value);
+            object safeValue = typeof(T).GetSafeObject(this.Value);
 
             return (T)safeValue;
         }
 
         public bool IsNull()
         {
-            return Value == null;
+            return this.Value == null;
         }
 
         public bool IsNullOrEmpty()
         {
-            return string.IsNullOrEmpty(Value);
+            return string.IsNullOrEmpty(this.Value);
         }
 
         public bool IsNullOrWhiteSpace()
         {
-            return string.IsNullOrWhiteSpace(Value);
+            return string.IsNullOrWhiteSpace(this.Value);
         }
     }
-
 }

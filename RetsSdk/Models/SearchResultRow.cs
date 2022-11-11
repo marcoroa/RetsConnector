@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class SearchResultRow
     {
         public string PrimaryKeyValue { get; private set; }
@@ -25,7 +25,7 @@ namespace CrestApps.RetsSdk.Models
             {
                 throw new ArgumentNullException($"{nameof(primaryKeyColumnName)} cannot be null.");
             }
-            RestrictedValue = restrictedValue ?? throw new ArgumentNullException($"{nameof(restrictedValue)} cannot be null."); ;
+            this.RestrictedValue = restrictedValue ?? throw new ArgumentNullException($"{nameof(restrictedValue)} cannot be null."); ;
 
             var columnLength = columns.Length;
 
@@ -40,7 +40,7 @@ namespace CrestApps.RetsSdk.Models
                 throw new IndexOutOfRangeException($"The provided {nameof(primaryKeyColumnName)} is not found in the {nameof(columns)} array.");
             }
 
-            PrimaryKeyValue = values[keyIndex];
+            this.PrimaryKeyValue = values[keyIndex];
 
             for (int index = 0; index < columnLength; index++)
             {
@@ -48,16 +48,15 @@ namespace CrestApps.RetsSdk.Models
                 SearchResultCellValue value = new SearchResultCellValue(rawValue);
 
                 value.SetIsPrimaryKeyValue(keyIndex == index);
-                value.SetIsRestricted(RestrictedValue);
+                value.SetIsRestricted(this.RestrictedValue);
 
-                Values.TryAdd(columns[index].ToLower(), value);
+                this.Values.TryAdd(columns[index].ToLower(), value);
             }
-
         }
 
         public bool IsRestricted(string columnName)
         {
-            return RestrictedValue.Equals(Get(columnName));
+            return this.RestrictedValue.Equals(this.Get(columnName));
         }
 
         public SearchResultCellValue Get(string columnName)
@@ -68,18 +67,17 @@ namespace CrestApps.RetsSdk.Models
             }
 
             string columnNameLower = columnName.ToLower();
-            if (!Values.ContainsKey(columnNameLower))
+            if (!this.Values.ContainsKey(columnNameLower))
             {
                 return null;
             }
 
-            return Values[columnNameLower];
+            return this.Values[columnNameLower];
         }
-
 
         public string GetValue(string columnName)
         {
-            var cell = Get(columnName);
+            var cell = this.Get(columnName);
 
             return cell?.Get();
         }
@@ -87,7 +85,7 @@ namespace CrestApps.RetsSdk.Models
         public T? GetValueNullable<T>(string columnName)
             where T : struct
         {
-            var cell = Get(columnName);
+            var cell = this.Get(columnName);
 
             return cell?.GetNullable<T>();
         }
@@ -95,9 +93,9 @@ namespace CrestApps.RetsSdk.Models
         public T GetValue<T>(string columnName)
             where T : struct
         {
-            var cell = Get(columnName);
+            var cell = this.Get(columnName);
 
-            if(cell == null)
+            if (cell == null)
             {
                 throw new Exception("Unable to find the provided column");
             }
@@ -107,10 +105,9 @@ namespace CrestApps.RetsSdk.Models
 
         public string GetNullOrValue(string columnName)
         {
-            var cell = Get(columnName);
+            var cell = this.Get(columnName);
 
             return cell?.NullOrValue();
         }
-
     }
 }

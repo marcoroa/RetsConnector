@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
 namespace CrestApps.RetsSdk.Helpers.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+
     public static class TypeExtensions
     {
 
@@ -16,7 +16,6 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             }
 
             Type trueType = Nullable.GetUnderlyingType(type) ?? type;
-
 
             if (trueType == typeof(string))
             {
@@ -48,18 +47,16 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             return tc.ConvertFromString(value);
         }
 
-
-
         // Integral = sbyte, byte, short, ushort, int, unint, long, ulong
         private static HashSet<Type> IntegralNumericTypes = new HashSet<Type>
         {
-            typeof(sbyte), typeof(byte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong)
+            typeof(sbyte), typeof(byte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong),
         };
 
         // Fractional = float, double, decimal
         private static HashSet<Type> FractionalNumericTypes = new HashSet<Type>
         {
-            typeof(float), typeof(double), typeof(decimal)
+            typeof(float), typeof(double), typeof(decimal),
         };
 
         /// <summary>
@@ -94,7 +91,6 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             return type.BaseTypes()
                        .Any(predicate);
         }
-
 
         public static Type FirstParticularType(this Type type, Type generic)
         {
@@ -145,7 +141,6 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             return IntegralNumericTypes.Contains(t);
         }
 
-
         /// <summary>
         /// Extension method to determine if a type if fractional numeric.
         /// </summary>
@@ -169,7 +164,6 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             return t == typeof(DateTime);
         }
 
-
         public static bool IsBoolean(this Type type)
         {
             Type t = Nullable.GetUnderlyingType(type) ?? type;
@@ -177,12 +171,11 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             return t == typeof(bool);
         }
 
-
         public static Type ExtractGenericInterface(this Type queryType, Type interfaceType)
         {
             Func<Type, bool> matchesInterface = t => t.IsGenericType && t.GetGenericTypeDefinition() == interfaceType;
 
-            return (matchesInterface(queryType)) ? queryType : queryType.GetInterfaces().FirstOrDefault(matchesInterface);
+            return matchesInterface(queryType) ? queryType : queryType.GetInterfaces().FirstOrDefault(matchesInterface);
         }
 
         public static Type[] GetTypeArgumentsIfMatch(this Type closedType, Type matchingOpenType)
@@ -198,7 +191,7 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
 
         public static bool IsCompatibleObject(this Type type, object value)
         {
-            return ((value == null && TypeAllowsNullValue(type)) || type.IsInstanceOfType(value));
+            return (value == null && TypeAllowsNullValue(type)) || type.IsInstanceOfType(value);
         }
 
         public static bool IsNullableValueType(this Type type)
@@ -208,7 +201,7 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
 
         public static bool TypeAllowsNullValue(this Type type)
         {
-            return (!type.IsValueType || IsNullableValueType(type));
+            return !type.IsValueType || IsNullableValueType(type);
         }
 
         public static bool IsTrueGenericType(this Type type)
@@ -216,6 +209,5 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             return type.IsArray ||
                 (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(IEnumerable<>)));
         }
-
     }
 }

@@ -1,16 +1,16 @@
-﻿using CrestApps.RetsSdk.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CrestApps.RetsSdk.Models;
 using CrestApps.RetsSdk.Models.Enums;
 using CrestApps.RetsSdk.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace RetsConnector
 {
@@ -96,13 +96,13 @@ namespace RetsConnector
             }
         }
 
-        private static async Task InvokeExample(string exampleNameToInvoke , IServiceProvider serviceProvider)
+        private static async Task InvokeExample(string exampleNameToInvoke, IServiceProvider serviceProvider)
         {
             IEnumerable<IExample> examples = serviceProvider.GetServices<IExample>();
-            
+
             IExample exampleToExecute = examples.FirstOrDefault(x => x.GetType().Name.Equals(exampleNameToInvoke, StringComparison.OrdinalIgnoreCase));
 
-            if(exampleToExecute == null)
+            if (exampleToExecute == null)
             {
                 ILogger<Program> logger = serviceProvider.GetService<ILogger<Program>>();
 
@@ -123,6 +123,4 @@ namespace RetsConnector
             return appRoot;
         }
     }
-
-
 }

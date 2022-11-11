@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
 namespace CrestApps.RetsSdk.Helpers.Extensions
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static class LinqExtensions
     {
         public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> items, int partitionSize)

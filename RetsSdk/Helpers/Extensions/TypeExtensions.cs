@@ -7,7 +7,6 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
 
     public static class TypeExtensions
     {
-
         public static object GetSafeObject(this Type type, string value)
         {
             if (Nullable.GetUnderlyingType(type) != null && string.IsNullOrWhiteSpace(value))
@@ -48,13 +47,13 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
         }
 
         // Integral = sbyte, byte, short, ushort, int, unint, long, ulong
-        private static HashSet<Type> IntegralNumericTypes = new HashSet<Type>
+        private static HashSet<Type> integralNumericTypes = new HashSet<Type>
         {
             typeof(sbyte), typeof(byte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong),
         };
 
         // Fractional = float, double, decimal
-        private static HashSet<Type> FractionalNumericTypes = new HashSet<Type>
+        private static HashSet<Type> fractionalNumericTypes = new HashSet<Type>
         {
             typeof(float), typeof(double), typeof(decimal),
         };
@@ -122,7 +121,7 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
         {
             Type t = Nullable.GetUnderlyingType(type) ?? type;
 
-            return IntegralNumericTypes.Contains(t) || FractionalNumericTypes.Contains(t);
+            return integralNumericTypes.Contains(t) || fractionalNumericTypes.Contains(t);
         }
 
         /// <summary>
@@ -138,7 +137,7 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
         {
             Type t = Nullable.GetUnderlyingType(type) ?? type;
 
-            return IntegralNumericTypes.Contains(t);
+            return integralNumericTypes.Contains(t);
         }
 
         /// <summary>
@@ -154,7 +153,7 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
         {
             Type t = Nullable.GetUnderlyingType(type) ?? type;
 
-            return FractionalNumericTypes.Contains(t);
+            return fractionalNumericTypes.Contains(t);
         }
 
         public static bool IsDateTime(this Type type)

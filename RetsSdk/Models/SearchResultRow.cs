@@ -6,7 +6,7 @@ namespace CrestApps.RetsSdk.Models
     public class SearchResultRow
     {
         public string PrimaryKeyValue { get; private set; }
-        private string RestrictedValue;
+        private string restrictedValue;
         private Dictionary<string, SearchResultCellValue> Values { get; set; } = new Dictionary<string, SearchResultCellValue>();
 
         public SearchResultRow(string[] columns, string[] values, string primaryKeyColumnName, string restrictedValue)
@@ -25,7 +25,8 @@ namespace CrestApps.RetsSdk.Models
             {
                 throw new ArgumentNullException($"{nameof(primaryKeyColumnName)} cannot be null.");
             }
-            this.RestrictedValue = restrictedValue ?? throw new ArgumentNullException($"{nameof(restrictedValue)} cannot be null."); ;
+
+            this.restrictedValue = restrictedValue ?? throw new ArgumentNullException($"{nameof(restrictedValue)} cannot be null."); ;
 
             var columnLength = columns.Length;
 
@@ -48,7 +49,7 @@ namespace CrestApps.RetsSdk.Models
                 SearchResultCellValue value = new SearchResultCellValue(rawValue);
 
                 value.SetIsPrimaryKeyValue(keyIndex == index);
-                value.SetIsRestricted(this.RestrictedValue);
+                value.SetIsRestricted(this.restrictedValue);
 
                 this.Values.TryAdd(columns[index].ToLower(), value);
             }
@@ -56,7 +57,7 @@ namespace CrestApps.RetsSdk.Models
 
         public bool IsRestricted(string columnName)
         {
-            return this.RestrictedValue.Equals(this.Get(columnName));
+            return this.restrictedValue.Equals(this.Get(columnName));
         }
 
         public SearchResultCellValue Get(string columnName)

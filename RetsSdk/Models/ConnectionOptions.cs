@@ -5,6 +5,11 @@ namespace CrestApps.RetsSdk.Models
 
     public class ConnectionOptions
     {
+        public ConnectionOptions()
+        {
+            this.Timeout = TimeSpan.FromHours(1);
+        }
+
         public string Username { get; set; }
         public string Password { get; set; }
         public AuthenticationType Type { get; set; }
@@ -15,11 +20,6 @@ namespace CrestApps.RetsSdk.Models
         public TimeSpan Timeout { get; set; }
         public UriKind UriType { get; set; } = UriKind.Absolute;
         public string BaseUrl { get; set; }
-
-        public ConnectionOptions()
-        {
-            this.Timeout = TimeSpan.FromHours(1);
-        }
 
         public RetsVersion Version => new RetsVersion(this.RetsServerVersion);
     }

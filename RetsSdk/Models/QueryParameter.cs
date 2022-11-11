@@ -2,9 +2,6 @@ namespace CrestApps.RetsSdk.Models
 {
     public class QueryParameter
     {
-        public string FieldName { get; set; }
-        public string Value { get; set; }
-
         public QueryParameter()
         {
         }
@@ -14,6 +11,9 @@ namespace CrestApps.RetsSdk.Models
             this.FieldName = fieldName;
             this.Value = value;
         }
+
+        public string FieldName { get; set; }
+        public string Value { get; set; }
 
         public override string ToString()
         {

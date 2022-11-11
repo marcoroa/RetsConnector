@@ -6,6 +6,8 @@ namespace CrestApps.RetsSdk.Models
 
     public class FileObject : IDisposable
     {
+        private bool isDisposed;
+
         public string ContentId { get; set; }
         public int ObjectId { get; set; }
         public ContentType ContentType { get; set; }
@@ -16,8 +18,6 @@ namespace CrestApps.RetsSdk.Models
         public bool IsPreferred { get; set; }
         public string Extension { get; set; }
         public Stream Content { get; set; }
-
-        private bool IsDisposed;
 
         public bool IsImage => this.ContentType?.MediaType.StartsWith("image", StringComparison.CurrentCultureIgnoreCase) ?? false;
 
@@ -45,7 +45,7 @@ namespace CrestApps.RetsSdk.Models
         // Protected implementation of Dispose pattern.
         protected virtual void Dispose(bool disposing)
         {
-            if (this.IsDisposed)
+            if (this.isDisposed)
             {
                 return;
             }
@@ -56,7 +56,7 @@ namespace CrestApps.RetsSdk.Models
                 this.Content.Dispose();
             }
 
-            this.IsDisposed = true;
+            this.isDisposed = true;
         }
     }
 }

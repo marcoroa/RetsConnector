@@ -5,7 +5,7 @@ namespace CrestApps.RetsSdk.Helpers
     using System.Text;
     using System.Text.RegularExpressions;
 
-    public class Str
+    public static class Str
     {
         public static string GetValue(string startWith, string[] lines, char splitter = '=')
         {
@@ -65,6 +65,7 @@ namespace CrestApps.RetsSdk.Helpers
                 {
                     sb.Append(hashBytes[i].ToString("X2"));
                 }
+
                 return sb.ToString();
             }
         }
@@ -86,7 +87,7 @@ namespace CrestApps.RetsSdk.Helpers
         }
 
         /// <summary>
-        /// Add ordinal to a giving number
+        /// Add ordinal to a giving number.
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
@@ -184,7 +185,6 @@ namespace CrestApps.RetsSdk.Helpers
 
         public static string StringOrNull(string str, bool trim = true)
         {
-
             if (string.IsNullOrWhiteSpace(str))
             {
                 return null;
@@ -298,6 +298,7 @@ namespace CrestApps.RetsSdk.Helpers
             {
                 return text;
             }
+
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
     }

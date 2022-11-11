@@ -4,14 +4,14 @@ namespace CrestApps.RetsSdk.Models
 
     public class SearchResultCellValue
     {
-        public bool IsPrimaryKeyValue { get; private set; }
-        public bool IsRestricted { get; private set; }
-        private string Value { get; set; }
-
         public SearchResultCellValue(string value)
         {
             this.Value = value;
         }
+
+        public bool IsPrimaryKeyValue { get; private set; }
+        public bool IsRestricted { get; private set; }
+        private string Value { get; set; }
 
         public void SetIsPrimaryKeyValue(bool isPrimaryKeyValue)
         {
@@ -48,15 +48,15 @@ namespace CrestApps.RetsSdk.Models
             return this.Value;
         }
 
-        public string GetTrimmed()
-        {
-            return this.Value?.Trim();
-        }
-
         public T Get<T>()
           where T : struct
         {
             return this.TryCastValue<T>();
+        }
+
+        public string GetTrimmed()
+        {
+            return this.Value?.Trim();
         }
 
         public T? GetNullable<T>()

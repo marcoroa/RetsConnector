@@ -1,24 +1,24 @@
-namespace CrestApps.RetsSdk.Exceptions
+﻿namespace CrestApps.RetsSdk.Exceptions
 {
     using System;
     using System.Runtime.Serialization;
 
     [Serializable]
-    public class RetsParsingException : Exception
+    public class ResourceDoesNotExistsException : Exception
     {
         private const string DefaultMessage = "Unable to parse the response";
 
-        public RetsParsingException()
+        public ResourceDoesNotExistsException()
             : base(DefaultMessage)
         {
         }
 
-        public RetsParsingException(string message)
+        public ResourceDoesNotExistsException(string message)
             : base(message)
         {
         }
 
-        protected RetsParsingException(SerializationInfo info, StreamingContext context)
+        protected ResourceDoesNotExistsException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

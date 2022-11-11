@@ -11,13 +11,13 @@ namespace CrestApps.RetsSdk.Services
 
     public class RetsWebRequester : IRetsRequester
     {
-        private readonly ConnectionOptions Options;
-        private readonly IHttpClientFactory HttpClientFactory;
+        private readonly ConnectionOptions options;
+        private readonly IHttpClientFactory httpClientFactory;
 
         public RetsWebRequester(IOptions<ConnectionOptions> options, IHttpClientFactory httpClientFactory)
         {
-            this.Options = options.Value;
-            this.HttpClientFactory = httpClientFactory;
+            this.options = options.Value;
+            this.httpClientFactory = httpClientFactory;
         }
 
         public async Task Get(Uri uri, Action<HttpResponseMessage> action, SessionResource resource = null, bool ensureSuccessStatusCode = true)
@@ -60,9 +60,9 @@ namespace CrestApps.RetsSdk.Services
         {
             HttpClient client = this.GetAuthenticatedClient();
 
-            client.Timeout = this.Options.Timeout;
-            client.DefaultRequestHeaders.Add("User-Agent", this.Options.UserAgent);
-            client.DefaultRequestHeaders.Add("RETS-Version", this.Options.Version.AsHeader());
+            client.Timeout = this.options.Timeout;
+            client.DefaultRequestHeaders.Add("User-Agent", this.options.UserAgent);
+            client.DefaultRequestHeaders.Add("RETS-Version", this.options.Version.AsHeader());
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip");
             client.DefaultRequestHeaders.Add("Accept", "*/*");
 
@@ -81,17 +81,17 @@ namespace CrestApps.RetsSdk.Services
 
         private HttpClient GetAuthenticatedClient()
         {
-            if (this.Options.Type == Models.Enums.AuthenticationType.Digest)
+            if (this.options.Type == Models.Enums.AuthenticationType.Digest)
             {
                 var credCache = new CredentialCache();
-                credCache.Add(new Uri(this.Options.LoginUrl), this.Options.Type.ToString(), new NetworkCredential(this.Options.Username, this.Options.Password));
+                credCache.Add(new Uri(this.options.LoginUrl), this.options.Type.ToString(), new NetworkCredential(this.options.Username, this.options.Password));
 
                 return new HttpClient(new HttpClientHandler { Credentials = credCache });
             }
 
-            HttpClient client = this.HttpClientFactory.CreateClient();
+            HttpClient client = this.httpClientFactory.CreateClient();
 
-            byte[] byteArray = Encoding.ASCII.GetBytes($"{this.Options.Username}:{this.Options.Password}");
+            byte[] byteArray = Encoding.ASCII.GetBytes($"{this.options.Username}:{this.options.Password}");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
             return client;

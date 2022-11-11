@@ -56,3 +56,6 @@ dotnet_diagnostic.SA1400.severity = error
 
 # CA1707: Identifiers should not contain underscores
 dotnet_diagnostic.CA1707.severity = suggestion
+
+# S112: General exceptions should never be thrown
+dotnet_diagnostic.S112.severity = suggestion

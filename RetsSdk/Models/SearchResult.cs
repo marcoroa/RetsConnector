@@ -1,25 +1,26 @@
 namespace CrestApps.RetsSdk.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System;
 
     public class SearchResult
     {
-        public RetsResource Resource { get; private set; }
-        public string ClassName { get; private set; }
-        private string RestrictedValue;
-        private string[] Columns { get; set; }
-        private Dictionary<string, SearchResultRow> Rows { get; set; }
+        private readonly string restrictedValue;
 
         public SearchResult(RetsResource resource, string className, string restrictedValue)
         {
+            this.Resource = resource ?? throw new ArgumentNullException(nameof(resource));
+            this.ClassName = className ?? throw new ArgumentNullException(nameof(className));
+            this.restrictedValue = restrictedValue ?? throw new ArgumentNullException(nameof(restrictedValue));
             this.Columns = new string[] { };
             this.Rows = new Dictionary<string, SearchResultRow>();
-            this.Resource = resource ?? throw new ArgumentNullException($"{nameof(resource)} cannot be null.");
-            this.ClassName = className ?? throw new ArgumentNullException($"{nameof(className)} cannot be null.");
-            this.RestrictedValue = restrictedValue ?? throw new ArgumentNullException($"{nameof(restrictedValue)} cannot be null.");
         }
+
+        public RetsResource Resource { get; private set; }
+        public string ClassName { get; private set; }
+        private string[] Columns { get; set; }
+        private Dictionary<string, SearchResultRow> Rows { get; set; }
 
         public SearchResultRow GetRow(string primaryKeyValue)
         {
@@ -33,9 +34,9 @@ namespace CrestApps.RetsSdk.Models
 
         public bool AddRow(SearchResultRow row)
         {
-            if (row == null)
+            if (row is null)
             {
-                throw new ArgumentNullException($"{nameof(row)} cannot be null.");
+                throw new ArgumentNullException(nameof(row));
             }
 
             return this.Rows.TryAdd(row.PrimaryKeyValue, row);
@@ -43,9 +44,9 @@ namespace CrestApps.RetsSdk.Models
 
         public bool RemoveRow(string primaryKeyValue)
         {
-            if (primaryKeyValue == null)
+            if (primaryKeyValue is null)
             {
-                throw new ArgumentNullException($"{nameof(primaryKeyValue)} cannot be null.");
+                throw new ArgumentNullException(nameof(primaryKeyValue));
             }
 
             if (this.Rows.ContainsKey(primaryKeyValue))
@@ -55,11 +56,12 @@ namespace CrestApps.RetsSdk.Models
 
             return false;
         }
+
         public bool RemoveRow(SearchResultRow row)
         {
-            if (row == null)
+            if (row is null)
             {
-                throw new ArgumentNullException($"{nameof(row)} cannot be null.");
+                throw new ArgumentNullException(nameof(row));
             }
 
             return this.Rows.Remove(row.PrimaryKeyValue);
@@ -100,22 +102,17 @@ namespace CrestApps.RetsSdk.Models
 
         public void SetColumns(string[] columns)
         {
-            this.Columns = columns ?? throw new ArgumentNullException($"{nameof(columns)} cannot be null.");
-        }
-
-        public void SetColumns(IEnumerable<string> columns)
-        {
-            this.SetColumns(columns?.AsEnumerable());
+            this.Columns = columns ?? throw new ArgumentNullException(nameof(columns));
         }
 
         public bool IsRestricted(string value)
         {
-            return this.RestrictedValue.Equals(value);
+            return this.restrictedValue.Equals(value);
         }
 
         public int Count()
         {
-            return this.Rows.Count();
+            return this.Rows.Count;
         }
     }
 }

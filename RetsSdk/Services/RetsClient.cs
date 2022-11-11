@@ -19,7 +19,7 @@ namespace CrestApps.RetsSdk.Services
 
     public class RetsClient : RetsResponseBase<RetsClient>, IRetsClient
     {
-        private readonly IRetsRequester Requester;
+        private readonly IRetsRequester requester;
         private readonly IRetsSession Session;
 
         protected Uri GetObjectUri => this.Session.Resource.GetCapability(Capability.GetObject);
@@ -30,7 +30,7 @@ namespace CrestApps.RetsSdk.Services
             : base(logger)
         {
             this.Session = session ?? throw new ArgumentNullException($"{nameof(session)} cannot be null");
-            this.Requester = requester ?? throw new ArgumentNullException($"{nameof(requester)} cannot be null");
+            this.requester = requester ?? throw new ArgumentNullException($"{nameof(requester)} cannot be null");
         }
 
         public async Task Connect()
@@ -86,7 +86,7 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.Requester.Get(uriBuilder.Uri, async (response) =>
+            return await this.requester.Get(uriBuilder.Uri, async (response) =>
             {
                 using (Stream stream = await this.GetStream(response))
                 {
@@ -141,7 +141,7 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.Requester.Get(uriBuilder.Uri, async (response) =>
+            return await this.requester.Get(uriBuilder.Uri, async (response) =>
             {
                 using (Stream stream = await this.GetStream(response))
                 {
@@ -192,7 +192,7 @@ namespace CrestApps.RetsSdk.Services
 
             RetsResourceCollection capsule = await this.GetResourcesMetadata();
 
-            var resource = capsule.Get().FirstOrDefault(x => x.ResourceId.Equals(resourceId, StringComparison.CurrentCultureIgnoreCase)) ?? throw new ResourceDoesNotExists();
+            var resource = capsule.Get().FirstOrDefault(x => x.ResourceId.Equals(resourceId, StringComparison.CurrentCultureIgnoreCase)) ?? throw new ResourceDoesNotExistsException();
 
             return resource;
         }
@@ -340,7 +340,7 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.Requester.Get(uriBuilder.Uri, async (response) =>
+            return await this.requester.Get(uriBuilder.Uri, async (response) =>
             {
                 string responseContentType = response.Content.Headers.ContentType.ToString(); // GetValues("Content-Type").FirstOrDefault();
 
@@ -399,7 +399,7 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.Requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadata<T>(response), this.Session.Resource);
+            return await this.requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadata<T>(response), this.Session.Resource);
         }
 
         protected async Task<IEnumerable<T>> MakeMetadataCollectionRequest<T>(string type, string resourceId, string format = "STANDARD-XML")
@@ -414,7 +414,7 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.Requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadataCollection<T>(response), this.Session.Resource);
+            return await this.requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadataCollection<T>(response), this.Session.Resource);
         }
 
         protected async Task<T> ParseMetadata<T>(HttpResponseMessage response)

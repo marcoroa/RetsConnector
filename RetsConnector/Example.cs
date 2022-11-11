@@ -9,38 +9,38 @@ namespace RetsConnector
 {
     public class Example : IExample
     {
-        private readonly IRetsClient Client;
+        private readonly IRetsClient client;
 
         public Example(IRetsClient client)
         {
-            this.Client = client;
+            this.client = client;
         }
 
         public async Task Execute()
         {
             // The first request we make to the RETS server is to login
-            await this.Client.Connect();
+            await this.client.Connect();
 
             // To get to know the RETS server, we can scan the entire system to get a list of our resources, classes, object.....
-            RetsSystem system = await this.Client.GetSystemMetadata();
+            RetsSystem system = await this.client.GetSystemMetadata();
 
             // We can also get a list of all available resources
-            RetsResourceCollection resources = await this.Client.GetResourcesMetadata();
+            RetsResourceCollection resources = await this.client.GetResourcesMetadata();
 
             // We can also get all available classes for a given resorce. Assuming your RETS server has a resource called "Property"
-            RetsClassCollection classes = await this.Client.GetClassesMetadata("Property");
+            RetsClassCollection classes = await this.client.GetClassesMetadata("Property");
 
             // We can also get a list of all available objects on a given property.
-            RetsObjectCollection objects = await this.Client.GetObjectMetadata("Property");
+            RetsObjectCollection objects = await this.client.GetObjectMetadata("Property");
 
             // We can also get a list of all available field for the given resource and class. Assuming your RETS server has a resource called "Property" with a class called "Listing"
-            RetsFieldCollection fields = await this.Client.GetTableMetadata("Property", "Listing");
+            RetsFieldCollection fields = await this.client.GetTableMetadata("Property", "Listing");
 
             // We can also get all available lookup values on the given resource
-            IEnumerable<RetsLookupTypeCollection> lookupTypes = await this.Client.GetLookupValues("Property");
+            IEnumerable<RetsLookupTypeCollection> lookupTypes = await this.client.GetLookupValues("Property");
 
             // We can also get a list of all available lookup types for a give resource and lookuptype aka fieldName
-            RetsLookupTypeCollection lookupType = await this.Client.GetLookupValues("Property", "FieldName");
+            RetsLookupTypeCollection lookupType = await this.client.GetLookupValues("Property", "FieldName");
 
             // We can perform a search against the RETS server
             SearchRequest searchRequest = new SearchRequest("Property", "Listing");
@@ -54,7 +54,7 @@ namespace RetsConnector
             searchRequest.AddColumn("SomeOtherColumnName");
 
             // This performs the search against the server
-            SearchResult result = await this.Client.Search(searchRequest);
+            SearchResult result = await this.client.Search(searchRequest);
 
             // we can iterate over the results like so
             foreach (SearchResultRow row in result.GetRows())
@@ -97,7 +97,7 @@ namespace RetsConnector
 
             // We can also download photos
             // This will return all photos for property with the primarykey 1234
-            IEnumerable<FileObject> files = await this.Client.GetObject("Property", "Photo", new PhotoId(1234), false);
+            IEnumerable<FileObject> files = await this.client.GetObject("Property", "Photo", new PhotoId(1234), false);
 
             // Here is how we can iterate over the fields
             foreach (FileObject file in files)
@@ -115,12 +115,12 @@ namespace RetsConnector
             }
 
             // you can get a specific image for a given primary key like so
-            IEnumerable<FileObject> files2 = await this.Client.GetObject("Property", "Photo", new PhotoId(1234, 1), false);
+            IEnumerable<FileObject> files2 = await this.client.GetObject("Property", "Photo", new PhotoId(1234, 1), false);
 
             // you can get also get images for multiple primary keys at the same time like this
             List<PhotoId> photoIds = new List<PhotoId>() { new PhotoId(1234), new PhotoId(5678), new PhotoId(2255) };
 
-            IEnumerable<FileObject> files3 = await this.Client.GetObject("Property", "Photo", photoIds, false);
+            IEnumerable<FileObject> files3 = await this.client.GetObject("Property", "Photo", photoIds, false);
 
             // When you are trying to download lots of images you must be very carfult. If you send the server too many ids at the same time
             // the server may return 404, 414, 500 or something along these lines because the request is too long.
@@ -133,21 +133,20 @@ namespace RetsConnector
             // You may want to still be careful because there will be 15,000 stored in the memory, so make sure you're not going to run our of memory
             // Anyhow, batching can easily be done like this
 
-            IEnumerable<FileObject> batchedFiles = await this.Client.GetObject("Property", "Photo", photoIds, batchSize: 100);
+            IEnumerable<FileObject> batchedFiles = await this.client.GetObject("Property", "Photo", photoIds, batchSize: 100);
 
             // Finally we can disconect
-            await this.Client.Disconnect();
+            await this.client.Disconnect();
 
             // The above code require us to First connect, then Disconnect when we are done. Not too bad, but we can simplfy the call by using
             // a method called RoundTrip() which will first connect, execure out code, then disconnect
 
             // to save some code you can do call RoundTrip() which will connect, call out method, then discconnect();
-            IEnumerable<FileObject> files4 = await this.Client.RoundTrip(async () =>
+            IEnumerable<FileObject> files4 = await this.client.RoundTrip(async () =>
             {
                 // Each batch will cause a round trip. In other words, each batch will connect, download a batch, then disconnect.
-                return await this.Client.GetObject("Property", "Photo", photoIds, batchSize: 20);
+                return await this.client.GetObject("Property", "Photo", photoIds, batchSize: 20);
             });
         }
     }
 }
-

@@ -39,7 +39,6 @@ namespace CrestApps.RetsSdk.Services
 
         public async Task<bool> Start()
         {
-
             this._Resource = await this.RetsRequester.Get(this.LoginUri, async (response) =>
             {
                 using (Stream stream = await this.GetStream(response))

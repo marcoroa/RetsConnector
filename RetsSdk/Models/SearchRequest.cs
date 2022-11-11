@@ -6,16 +6,7 @@ namespace CrestApps.RetsSdk.Models
 
     public class SearchRequest
     {
-        public string SearchType { get; set; }
-        public string Class { get; set; }
-        public string QueryType { get; set; } = "DMQL2";
-        public int Count { get; set; } = 0;
-        public string Format { get; set; } = "COMPACT-DECODED"; // COMPACT-DECODED
-        public string RestrictedIndicator { get; set; } = "****";
-        public int Limit { get; set; } = int.MaxValue;
-        public int StandardNames { get; set; } = 0;
-        public QueryParameterGroup ParameterGroup { get; set; }
-        private List<string> Columns = new List<string>();
+        private List<string> columns = new List<string>();
 
         public SearchRequest()
         {
@@ -29,14 +20,24 @@ namespace CrestApps.RetsSdk.Models
             this.Class = className;
         }
 
+        public string SearchType { get; set; }
+        public string Class { get; set; }
+        public string QueryType { get; set; } = "DMQL2";
+        public int Count { get; set; } = 0;
+        public string Format { get; set; } = "COMPACT-DECODED";
+        public string RestrictedIndicator { get; set; } = "****";
+        public int Limit { get; set; } = int.MaxValue;
+        public int StandardNames { get; set; } = 0;
+        public QueryParameterGroup ParameterGroup { get; set; }
+
         public void AddColumn(string columnName)
         {
-            if (string.IsNullOrWhiteSpace(columnName) || this.Columns.Contains(columnName, StringComparer.CurrentCultureIgnoreCase))
+            if (string.IsNullOrWhiteSpace(columnName) || this.columns.Contains(columnName, StringComparer.CurrentCultureIgnoreCase))
             {
                 return;
             }
 
-            this.Columns.Add(columnName);
+            this.columns.Add(columnName);
         }
 
         public void AddColumns(IEnumerable<string> columnNames)
@@ -54,29 +55,29 @@ namespace CrestApps.RetsSdk.Models
 
         public void RemoveColumn(string columnName)
         {
-            this.Columns = this.Columns.Where(x => x != columnName).ToList();
+            this.columns = this.columns.Where(x => x != columnName).ToList();
         }
 
         public void RemoveColumns(IEnumerable<string> columnNames)
         {
-            this.Columns = this.Columns.Where(x => !columnNames.Contains(x)).ToList();
+            this.columns = this.columns.Where(x => !columnNames.Contains(x)).ToList();
         }
 
         public bool HasColumns()
         {
-            return this.Columns.Any();
+            return this.columns.Any();
         }
 
         public bool HasColumn(string columnName)
         {
-            bool exists = this.Columns.Any(x => x.Equals(columnName, StringComparison.CurrentCultureIgnoreCase));
+            bool exists = this.columns.Any(x => x.Equals(columnName, StringComparison.CurrentCultureIgnoreCase));
 
             return exists;
         }
 
         public IEnumerable<string> GetColumns()
         {
-            return this.Columns.Distinct();
+            return this.columns.Distinct();
         }
     }
 }

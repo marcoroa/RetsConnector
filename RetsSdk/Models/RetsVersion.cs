@@ -6,25 +6,32 @@ namespace CrestApps.RetsSdk.Models
 
     public class RetsVersion : Version
     {
-        private SupportedRetsVersion RetVersion;
+        private readonly SupportedRetsVersion retVersion;
 
         public RetsVersion(SupportedRetsVersion retsVersion)
         {
-            this.RetVersion = retsVersion;
+            this.retVersion = retsVersion;
             string version = ExtractVersionNumber(retsVersion);
 
             this.Load(version);
         }
 
+        public static SupportedRetsVersion Make(string version)
+        {
+            var supportedVersion = Str.TrimStart(version, "RETS/").Replace('.', '_');
+
+            var castable = Str.PrependOnce(supportedVersion, "Version_");
+
+            return Enum.Parse<SupportedRetsVersion>(castable);
+        }
+
         public string AsHeader()
         {
-            return $"RETS/{this.ToString()}";
+            return $"RETS/{this}";
         }
 
         public override string ToString()
         {
-            string version = string.Empty;
-
             if (!this.Major.HasValue)
             {
                 throw new NullReferenceException($"The {this.Major} value cannot be null.");
@@ -46,15 +53,6 @@ namespace CrestApps.RetsSdk.Models
         private static string ExtractVersionNumber(SupportedRetsVersion retsVersion)
         {
             return Str.TrimStart(retsVersion.ToString(), "Version_").Replace('_', '.');
-        }
-
-        public static SupportedRetsVersion Make(string version)
-        {
-            var v = Str.TrimStart(version, "RETS/").Replace('.', '_');
-
-            var castable = Str.PrependOnce(v, "Version_");
-
-            return Enum.Parse<SupportedRetsVersion>(castable);
         }
     }
 }

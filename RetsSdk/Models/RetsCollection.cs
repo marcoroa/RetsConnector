@@ -12,25 +12,25 @@ namespace CrestApps.RetsSdk.Models
     public abstract class RetsCollection<T> : IMetadataCollection, IMetadataCollectionLoad, IRetsCollectionXElementLoader, IMetadataCollection<T>
         where T : class, new()
     {
+        private List<T> items = new List<T>();
+        private Type _Type;
+
         public string Version { get; set; }
         public DateTime Date { get; set; }
 
-        private List<T> Items = new List<T>();
-        private Type _Type;
-
-        public void Add(T item)
+        public void Add(T resource)
         {
-            if (item == null)
+            if (resource == null)
             {
                 return;
             }
 
-            this.Items.Add(item);
+            this.items.Add(resource);
         }
 
         public IEnumerable<T> Get()
         {
-            return this.Items;
+            return this.items;
         }
 
         public Type GetGenericType()
@@ -50,7 +50,7 @@ namespace CrestApps.RetsSdk.Models
                 return;
             }
 
-            this.Items.Remove(resource);
+            this.items.Remove(resource);
         }
 
         public void Load(Type collectionType, XElement xElement)

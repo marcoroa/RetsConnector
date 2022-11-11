@@ -66,12 +66,12 @@ namespace CrestApps.RetsSdk.Services
 
                 if (code == 20210)
                 {
-                    throw new TooManyOutstandingQueries(message);
+                    throw new TooManyOutstandingQueriesException(message);
                 }
 
                 if (code == 20512 || code == 20412)
                 {
-                    throw new TooManyOutstandingRequests(message);
+                    throw new TooManyOutstandingRequestsException(message);
                 }
 
                 throw new RetsException(message);

@@ -34,7 +34,7 @@ namespace CrestApps.RetsSdk.Models
         {
             if (this.Parameters == null || !this.Parameters.Any())
             {
-                return null;
+                return string.Empty;
             }
 
             string glue = ",";

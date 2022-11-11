@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using CrestApps.RetsSdk.Models;
-using CrestApps.RetsSdk.Models.Enums;
-using CrestApps.RetsSdk.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
-namespace RetsConnector
+namespace CrestApps.RetsConnector
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Models;
+    using CrestApps.RetsSdk.Models.Enums;
+    using CrestApps.RetsSdk.Services;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+
     public class Program
     {
+        protected Program()
+        {
+        }
+
         public static async Task Main(string[] args)
         {
             using var builder = new HostBuilder()
@@ -106,7 +111,7 @@ namespace RetsConnector
             {
                 ILogger<Program> logger = serviceProvider.GetService<ILogger<Program>>();
 
-                logger.LogWarning($"Unable to find example with the name '{exampleNameToInvoke}'.");
+                logger.LogWarning("Unable to find example with the name '{exampleNameToInvoke}'.", exampleNameToInvoke);
 
                 return;
             }
@@ -116,8 +121,7 @@ namespace RetsConnector
 
         private static string GetApplicationRoot()
         {
-            var exePath = Path.GetDirectoryName(System.Reflection
-                              .Assembly.GetExecutingAssembly().CodeBase);
+            var exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             var appRoot = appPathMatcher.Match(exePath).Value;
             return appRoot;

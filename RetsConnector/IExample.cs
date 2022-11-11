@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace RetsConnector
+namespace CrestApps.RetsConnector
 {
     public interface IExample
     {

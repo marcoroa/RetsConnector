@@ -15,12 +15,9 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             if (name != null)
             {
                 FieldInfo field = type.GetField(name);
-                if (field != null)
+                if (field != null && Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr)
                 {
-                    if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr)
-                    {
-                        return attr.Description;
-                    }
+                    return attr.Description;
                 }
             }
 
@@ -36,12 +33,9 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
             if (name != null)
             {
                 FieldInfo field = type.GetField(name);
-                if (field != null)
+                if (field != null && Attribute.GetCustomAttribute(field, typeof(CategoryAttribute)) is CategoryAttribute attr)
                 {
-                    if (Attribute.GetCustomAttribute(field, typeof(CategoryAttribute)) is CategoryAttribute attr)
-                    {
-                        return attr.Category;
-                    }
+                    return attr.Category;
                 }
             }
 

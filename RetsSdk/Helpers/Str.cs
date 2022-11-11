@@ -25,12 +25,12 @@ namespace CrestApps.RetsSdk.Helpers
         }
 
         /// <summary>
-        /// Gets a null if the giving string is null or whitespace or a trimmed string
+        /// Gets a null if the giving string is null or whitespace or a trimmed string.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="trimStart"></param>
-        /// <param name="trimEnd"></param>
-        /// <returns></returns>
+        /// <param name="value">String to be validated</param>
+        /// <param name="trimStart">Instructs to trim all blank spaces at the start of the provided string.</param>
+        /// <param name="trimEnd">Instructs to trim all blank spaces at the end of the provided string.</param>
+        /// <returns>Returns the altered string based on the parameters passed. If the provided string is null, empty or white space.</returns>
         public static string NullOrString(string value, bool trimStart = true, bool trimEnd = true)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -72,10 +72,10 @@ namespace CrestApps.RetsSdk.Helpers
 
         /// <summary>
         /// Adds a space after each Capital Letter.
-        /// "HelloWorldThisIsATest" would then be "Hello World This Is A Test"
+        /// "HelloWorldThisIsATest" would then be "Hello World This Is A Test".
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
+        /// <param name="text">Text to add a space after each capital letter.</param>
+        /// <returns>Returns an altered string with added spaces. For Example: If text is "HelloWorldThisIsATest" the return value will be "Hello World This Is A Test"</returns>
         public static string AddSpacesToWords(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -89,8 +89,8 @@ namespace CrestApps.RetsSdk.Helpers
         /// <summary>
         /// Add ordinal to a giving number.
         /// </summary>
-        /// <param name="num"></param>
-        /// <returns></returns>
+        /// <param name="num">number to convert to ordinal form.</param>
+        /// <returns>Returns a string representation of the integer in ordinal form. Example: If num is 13 the return value will be "13th".</returns>
         public static string AddOrdinal(int num)
         {
             if (num <= 0)
@@ -106,17 +106,13 @@ namespace CrestApps.RetsSdk.Helpers
                     return num + "th";
             }
 
-            switch (num % 10)
+            return (num % 10) switch
             {
-                case 1:
-                    return num + "st";
-                case 2:
-                    return num + "nd";
-                case 3:
-                    return num + "rd";
-                default:
-                    return num + "th";
-            }
+                1 => num + "st",
+                2 => num + "nd",
+                3 => num + "rd",
+                _ => num + "th",
+            };
         }
 
         public static string Truncate(string value, int maxLength)
@@ -127,11 +123,6 @@ namespace CrestApps.RetsSdk.Helpers
             }
 
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
-        }
-
-        public static string TrimEnd(string subject, string pattern)
-        {
-            return TrimEnd(subject, pattern, StringComparison.CurrentCulture);
         }
 
         public static string Random(int length = 40)
@@ -149,6 +140,11 @@ namespace CrestApps.RetsSdk.Helpers
             }
 
             return defaultValue;
+        }
+
+        public static string TrimEnd(string subject, string pattern)
+        {
+            return TrimEnd(subject, pattern, StringComparison.CurrentCulture);
         }
 
         public static string TrimEnd(string subject, string pattern, StringComparison type)
@@ -281,7 +277,7 @@ namespace CrestApps.RetsSdk.Helpers
         {
             if (string.IsNullOrWhiteSpace(str))
             {
-                return "";
+                return string.Empty;
             }
 
             string newValue = isHtml5 ? "<br>" : "<br />";

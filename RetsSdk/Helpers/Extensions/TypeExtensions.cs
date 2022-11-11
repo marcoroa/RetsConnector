@@ -7,6 +7,18 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
 
     public static class TypeExtensions
     {
+        // Integral = sbyte, byte, short, ushort, int, unint, long, ulong
+        private static HashSet<Type> integralNumericTypes = new HashSet<Type>
+        {
+            typeof(sbyte), typeof(byte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong),
+        };
+
+        // Fractional = float, double, decimal
+        private static HashSet<Type> fractionalNumericTypes = new HashSet<Type>
+        {
+            typeof(float), typeof(double), typeof(decimal),
+        };
+
         public static object GetSafeObject(this Type type, string value)
         {
             if (Nullable.GetUnderlyingType(type) != null && string.IsNullOrWhiteSpace(value))
@@ -45,18 +57,6 @@ namespace CrestApps.RetsSdk.Helpers.Extensions
 
             return tc.ConvertFromString(value);
         }
-
-        // Integral = sbyte, byte, short, ushort, int, unint, long, ulong
-        private static HashSet<Type> integralNumericTypes = new HashSet<Type>
-        {
-            typeof(sbyte), typeof(byte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong),
-        };
-
-        // Fractional = float, double, decimal
-        private static HashSet<Type> fractionalNumericTypes = new HashSet<Type>
-        {
-            typeof(float), typeof(double), typeof(decimal),
-        };
 
         /// <summary>
         /// Finds the BaseType

@@ -14,7 +14,7 @@ namespace CrestApps.RetsSdk.Services
     {
         protected readonly ILogger<T> Log;
 
-        public RetsResponseBase(ILogger<T> log)
+        protected RetsResponseBase(ILogger<T> log)
         {
             this.Log = log;
         }

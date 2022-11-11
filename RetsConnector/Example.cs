@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using CrestApps.RetsSdk.Models;
-using CrestApps.RetsSdk.Services;
-
-namespace RetsConnector
+namespace CrestApps.RetsConnector
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading.Tasks;
+    using CrestApps.RetsSdk.Models;
+    using CrestApps.RetsSdk.Services;
+
+#pragma warning disable S125 // Sections of code should not be commented out
+#pragma warning disable S1481 // Unused local variables should be removed
     public class Example : IExample
     {
         private readonly IRetsClient client;
@@ -21,7 +23,7 @@ namespace RetsConnector
             // The first request we make to the RETS server is to login
             await this.client.Connect();
 
-            // To get to know the RETS server, we can scan the entire system to get a list of our resources, classes, object.....
+            // To get to know the RETS server, we can scan the entire system to get a list of our resources, classes, object...
             RetsSystem system = await this.client.GetSystemMetadata();
 
             // We can also get a list of all available resources
@@ -71,11 +73,10 @@ namespace RetsConnector
 
                     // Assuming you know the type of the returned data, you can cast the values like so
                     // Of cource you must know that the column is int type befor eyou call this
-                    //int castedToIntValue = value.Get<int>(); 
-                    //you can also do something like
-                    //int? castedToIntValue = value.GetNullable<int>(); 
-                    //DateTime? castedToIntValue = value.GetNullable<DateTime>();
-
+                    // int castedToIntValue = value.Get<int>(); 
+                    // you can also do something like
+                    // int? castedToIntValue = value.GetNullable<int>(); 
+                    // DateTime? castedToIntValue = value.GetNullable<DateTime>();
                     // you can also check if the value is restricted like this
                     bool restrictedValue = value.IsRestricted;
 
@@ -97,7 +98,7 @@ namespace RetsConnector
 
             // We can also download photos
             // This will return all photos for property with the primarykey 1234
-            IEnumerable<FileObject> files = await this.client.GetObject("Property", "Photo", new PhotoId(1234), false);
+            IEnumerable<FileObject> files = await this.client.GetObject("Property", "Photo", new PhotoId("1234"), false);
 
             // Here is how we can iterate over the fields
             foreach (FileObject file in files)
@@ -115,10 +116,10 @@ namespace RetsConnector
             }
 
             // you can get a specific image for a given primary key like so
-            IEnumerable<FileObject> files2 = await this.client.GetObject("Property", "Photo", new PhotoId(1234, 1), false);
+            IEnumerable<FileObject> files2 = await this.client.GetObject("Property", "Photo", new PhotoId("1234", 1), false);
 
             // you can get also get images for multiple primary keys at the same time like this
-            List<PhotoId> photoIds = new List<PhotoId>() { new PhotoId(1234), new PhotoId(5678), new PhotoId(2255) };
+            List<PhotoId> photoIds = new List<PhotoId>() { new PhotoId("1234"), new PhotoId("5678"), new PhotoId("2255") };
 
             IEnumerable<FileObject> files3 = await this.client.GetObject("Property", "Photo", photoIds, false);
 
@@ -140,7 +141,7 @@ namespace RetsConnector
             // The above code require us to First connect, then Disconnect when we are done. Not too bad, but we can simplfy the call by using
             // a method called RoundTrip() which will first connect, execure out code, then disconnect
 
-            // to save some code you can do call RoundTrip() which will connect, call out method, then discconnect();
+            //// to save some code you can do call RoundTrip() which will connect, call out method, then discconnect();
             IEnumerable<FileObject> files4 = await this.client.RoundTrip(async () =>
             {
                 // Each batch will cause a round trip. In other words, each batch will connect, download a batch, then disconnect.

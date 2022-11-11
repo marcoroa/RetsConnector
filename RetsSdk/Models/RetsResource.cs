@@ -38,21 +38,18 @@ namespace CrestApps.RetsSdk.Models
 
         public async Task<RetsClassCollection> GetClasses(IRetsClient session)
         {
-            if (this.Classes == null)
-            {
-                this.Classes = await session.GetClassesMetadata(this.ResourceId);
-            }
+            this.Classes ??= await session.GetClassesMetadata(this.ResourceId);
 
             return this.Classes;
         }
 
         public async Task<RetsClass> GetClass(IRetsClient session, string className)
         {
-            var _classes = await this.GetClasses(session);
+            var classes = await this.GetClasses(session);
 
-            RetsClass _class = _classes.Get().FirstOrDefault(x => x.ClassName.Equals(className, StringComparison.CurrentCultureIgnoreCase));
+            RetsClass retsClass = classes.Get().FirstOrDefault(x => x.ClassName.Equals(className, StringComparison.CurrentCultureIgnoreCase));
 
-            return _class;
+            return retsClass;
         }
     }
 }

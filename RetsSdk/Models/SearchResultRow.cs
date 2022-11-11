@@ -78,19 +78,19 @@ namespace CrestApps.RetsSdk.Models
             return this.Values[columnNameLower];
         }
 
-        public string GetValue(string columnName)
-        {
-            var cell = this.Get(columnName);
-
-            return cell?.Get();
-        }
-
         public T? GetValueNullable<T>(string columnName)
             where T : struct
         {
             var cell = this.Get(columnName);
 
             return cell?.GetNullable<T>();
+        }
+
+        public string GetValue(string columnName)
+        {
+            var cell = this.Get(columnName);
+
+            return cell?.Get();
         }
 
         public T GetValue<T>(string columnName)

@@ -12,8 +12,8 @@ namespace CrestApps.RetsSdk.Models
     public abstract class RetsCollection<T> : IMetadataCollection, IMetadataCollectionLoad, IRetsCollectionXElementLoader, IMetadataCollection<T>
         where T : class, new()
     {
-        private List<T> items = new List<T>();
-        private Type _Type;
+        private readonly List<T> items = new List<T>();
+        private Type type;
 
         public string Version { get; set; }
         public DateTime Date { get; set; }
@@ -35,12 +35,12 @@ namespace CrestApps.RetsSdk.Models
 
         public Type GetGenericType()
         {
-            if (this._Type == null)
+            if (this.type == null)
             {
-                this._Type = typeof(T);
+                this.type = typeof(T);
             }
 
-            return this._Type;
+            return this.type;
         }
 
         public void Remove(T resource)

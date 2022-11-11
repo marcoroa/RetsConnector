@@ -83,7 +83,6 @@ namespace CrestApps.RetsSdk.Services
             // 20201 - No records found.
             // 20403 - No objects found
             // 0 - Success
-
             return code == 0 || code == 20201 || code == 20403;
         }
     }

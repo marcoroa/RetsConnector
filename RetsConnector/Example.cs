@@ -132,7 +132,6 @@ namespace RetsConnector
             // We can split the 1000 properties into a smaller number like 100. This will make 10 (i.e 1000/100) request to the RETS server then return you an object of 15,000 images
             // You may want to still be careful because there will be 15,000 stored in the memory, so make sure you're not going to run our of memory
             // Anyhow, batching can easily be done like this
-
             IEnumerable<FileObject> batchedFiles = await this.client.GetObject("Property", "Photo", photoIds, batchSize: 100);
 
             // Finally we can disconect

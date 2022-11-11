@@ -20,27 +20,27 @@ namespace CrestApps.RetsSdk.Services
     public class RetsClient : RetsResponseBase<RetsClient>, IRetsClient
     {
         private readonly IRetsRequester requester;
-        private readonly IRetsSession Session;
-
-        protected Uri GetObjectUri => this.Session.Resource.GetCapability(Capability.GetObject);
-        protected Uri SearchUri => this.Session.Resource.GetCapability(Capability.Search);
-        protected Uri GetMetadataUri => this.Session.Resource.GetCapability(Capability.GetMetadata);
+        private readonly IRetsSession session;
 
         public RetsClient(IRetsSession session, IRetsRequester requester, ILogger<RetsClient> logger)
             : base(logger)
         {
-            this.Session = session ?? throw new ArgumentNullException($"{nameof(session)} cannot be null");
-            this.requester = requester ?? throw new ArgumentNullException($"{nameof(requester)} cannot be null");
+            this.session = session ?? throw new ArgumentNullException(nameof(session));
+            this.requester = requester ?? throw new ArgumentNullException(nameof(requester));
         }
+
+        protected Uri GetObjectUri => this.session.Resource.GetCapability(Capability.GetObject);
+        protected Uri SearchUri => this.session.Resource.GetCapability(Capability.Search);
+        protected Uri GetMetadataUri => this.session.Resource.GetCapability(Capability.GetMetadata);
 
         public async Task Connect()
         {
-            await this.Session.Start();
+            await this.session.Start();
         }
 
         public async Task Disconnect()
         {
-            await this.Session.End();
+            await this.session.End();
         }
 
         public async Task<SearchResult> Search(SearchRequest request)
@@ -127,7 +127,7 @@ namespace CrestApps.RetsSdk.Services
 
                     return result;
                 }
-            }, this.Session.Resource);
+            }, this.session.Resource);
         }
 
         public async Task<RetsSystem> GetSystemMetadata()
@@ -173,7 +173,7 @@ namespace CrestApps.RetsSdk.Services
 
                     return system;
                 }
-            }, this.Session.Resource);
+            }, this.session.Resource);
         }
 
         public async Task<RetsResourceCollection> GetResourcesMetadata()
@@ -234,30 +234,27 @@ namespace CrestApps.RetsSdk.Services
 
         public async Task<IEnumerable<FileObject>> GetObject(string resource, string type, IEnumerable<PhotoId> ids, int batchSize, bool useLocation = false)
         {
-            if (string.IsNullOrWhiteSpace(resource))
+            if (string.IsNullOrEmpty(resource))
             {
-                throw new ArgumentNullException($"{nameof(resource)} cannot be null.");
+                throw new ArgumentNullException(nameof(resource), $"'{nameof(resource)}' cannot be null or empty.");
             }
 
-            if (string.IsNullOrWhiteSpace(type))
+            if (string.IsNullOrEmpty(type))
             {
-                throw new ArgumentNullException($"{nameof(type)} cannot be null.");
+                throw new ArgumentNullException(nameof(type), $"'{nameof(type)}' cannot be null or empty.");
             }
 
-            if (ids == null)
+            if (ids is null)
             {
-                throw new ArgumentNullException($"{nameof(ids)} cannot be null.");
+                throw new ArgumentNullException(nameof(ids));
             }
 
             List<FileObject> files = new List<FileObject>();
-
             IEnumerable<IEnumerable<PhotoId>> pages = ids.Partition(batchSize);
-
             foreach (var page in pages)
             {
                 // To prevent having to many outstanding requests
-                // we should connect, force round trip on every page 
-
+                // we should connect, force round trip on every page
                 IEnumerable<FileObject> _files = await this.RoundTrip(async () =>
                 {
                     return await this.GetObject(resource, type, page, useLocation);
@@ -273,16 +270,12 @@ namespace CrestApps.RetsSdk.Services
         {
             try
             {
-                if (!this.Session.IsStarted())
+                if (!this.session.IsStarted())
                 {
                     await this.Connect();
                 }
 
                 action?.Invoke();
-            }
-            catch
-            {
-                throw;
             }
             finally
             {
@@ -294,17 +287,13 @@ namespace CrestApps.RetsSdk.Services
         {
             try
             {
-                if (!this.Session.IsStarted())
+                if (!this.session.IsStarted())
                 {
                     await this.Connect();
                 }
 
                 TResult result = await action.Invoke();
                 return result;
-            }
-            catch
-            {
-                throw;
             }
             finally
             {
@@ -314,19 +303,19 @@ namespace CrestApps.RetsSdk.Services
 
         public async Task<IEnumerable<FileObject>> GetObject(string resource, string type, IEnumerable<PhotoId> ids, bool useLocation = false)
         {
-            if (string.IsNullOrWhiteSpace(resource))
+            if (string.IsNullOrEmpty(resource))
             {
-                throw new ArgumentNullException($"{nameof(resource)} cannot be null.");
+                throw new ArgumentNullException(nameof(resource), $"'{nameof(resource)}' cannot be null or empty.");
             }
 
-            if (string.IsNullOrWhiteSpace(type))
+            if (string.IsNullOrEmpty(type))
             {
-                throw new ArgumentNullException($"{nameof(type)} cannot be null.");
+                throw new ArgumentNullException(nameof(type), $"'{nameof(type)}' cannot be null or empty.");
             }
 
-            if (ids == null)
+            if (ids is null)
             {
-                throw new ArgumentNullException($"{nameof(ids)} cannot be null.");
+                throw new ArgumentNullException(nameof(ids));
             }
 
             var uriBuilder = new UriBuilder(this.GetObjectUri);
@@ -340,12 +329,12 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.requester.Get(uriBuilder.Uri, async (response) =>
+            return await this.requester.Get(uriBuilder.Uri, (response) => ProcessResponse(response), this.session.Resource);
+
+            async Task<List<FileObject>> ProcessResponse(HttpResponseMessage response)
             {
-                string responseContentType = response.Content.Headers.ContentType.ToString(); // GetValues("Content-Type").FirstOrDefault();
-
+                string responseContentType = response.Content.Headers.ContentType.ToString();
                 var files = new List<FileObject>();
-
                 if (!ContentType.TryParse(responseContentType, out ContentType documentContentType))
                 {
                     return files;
@@ -364,11 +353,9 @@ namespace CrestApps.RetsSdk.Services
                     }
 
                     MimeEntity entity = MimeEntity.Load(documentContentType, memoryStream);
-
                     if (entity is Multipart multipart)
                     {
                         // At this point we know this is a multi-image response
-
                         foreach (MimePart part in multipart.OfType<MimePart>())
                         {
                             files.Add(this.ProcessMessage(part));
@@ -385,7 +372,7 @@ namespace CrestApps.RetsSdk.Services
                 }
 
                 return files;
-            }, this.Session.Resource);
+            }
         }
 
         protected async Task<T> MakeMetadataRequest<T>(string type, string id, string format = "STANDARD-XML")
@@ -399,7 +386,7 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadata<T>(response), this.Session.Resource);
+            return await this.requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadata<T>(response), this.session.Resource);
         }
 
         protected async Task<IEnumerable<T>> MakeMetadataCollectionRequest<T>(string type, string resourceId, string format = "STANDARD-XML")
@@ -414,7 +401,7 @@ namespace CrestApps.RetsSdk.Services
 
             uriBuilder.Query = query.ToString();
 
-            return await this.requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadataCollection<T>(response), this.Session.Resource);
+            return await this.requester.Get(uriBuilder.Uri, async (response) => await this.ParseMetadataCollection<T>(response), this.session.Resource);
         }
 
         protected async Task<T> ParseMetadata<T>(HttpResponseMessage response)

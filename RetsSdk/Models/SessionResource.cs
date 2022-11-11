@@ -7,15 +7,16 @@ namespace CrestApps.RetsSdk.Models
 
     public class SessionResource
     {
-        public string SessionId { get; set; }
-        public string Cookie { get; set; }
-
-        public Dictionary<Capability, Uri> Capabilities { get; set; }
-
         public SessionResource()
         {
             this.Capabilities = new Dictionary<Capability, Uri>();
         }
+
+        public string SessionId { get; set; }
+
+        public string Cookie { get; set; }
+
+        public Dictionary<Capability, Uri> Capabilities { get; set; }
 
         public void AddCapability(Capability name, string url, UriKind uriType)
         {

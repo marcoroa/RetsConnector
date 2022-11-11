@@ -5,34 +5,32 @@ namespace CrestApps.RetsSdk.Models
 
     public class SearchResultRow
     {
-        public string PrimaryKeyValue { get; private set; }
-        private string restrictedValue;
-        private Dictionary<string, SearchResultCellValue> Values { get; set; } = new Dictionary<string, SearchResultCellValue>();
+        private readonly string restrictedValue;
 
         public SearchResultRow(string[] columns, string[] values, string primaryKeyColumnName, string restrictedValue)
         {
-            if (columns == null)
+            if (columns is null)
             {
-                throw new ArgumentNullException($"{nameof(columns)} cannot be null.");
+                throw new ArgumentNullException(nameof(columns));
             }
 
-            if (values == null)
+            if (values is null)
             {
-                throw new ArgumentNullException($"{nameof(values)} cannot be null.");
+                throw new ArgumentNullException(nameof(values));
             }
 
-            if (primaryKeyColumnName == null)
+            if (string.IsNullOrEmpty(primaryKeyColumnName))
             {
-                throw new ArgumentNullException($"{nameof(primaryKeyColumnName)} cannot be null.");
+                throw new ArgumentNullException(nameof(primaryKeyColumnName), $"'{nameof(primaryKeyColumnName)}' cannot be null or empty.");
             }
 
-            this.restrictedValue = restrictedValue ?? throw new ArgumentNullException($"{nameof(restrictedValue)} cannot be null."); ;
+            this.restrictedValue = restrictedValue ?? throw new ArgumentNullException(nameof(restrictedValue));
 
             var columnLength = columns.Length;
 
             if (columnLength != values.Length)
             {
-                throw new ArgumentOutOfRangeException($"Both '{nameof(columns)}' and '{nameof(values)}' must have the same size!");
+                throw new ArgumentOutOfRangeException(nameof(columns), $"Both '{nameof(columns)}' and '{nameof(values)}' must have the same size!");
             }
 
             int keyIndex = Array.IndexOf(columns, primaryKeyColumnName);
@@ -55,6 +53,10 @@ namespace CrestApps.RetsSdk.Models
             }
         }
 
+        public string PrimaryKeyValue { get; private set; }
+
+        private Dictionary<string, SearchResultCellValue> Values { get; set; } = new Dictionary<string, SearchResultCellValue>();
+
         public bool IsRestricted(string columnName)
         {
             return this.restrictedValue.Equals(this.Get(columnName));
@@ -62,9 +64,9 @@ namespace CrestApps.RetsSdk.Models
 
         public SearchResultCellValue Get(string columnName)
         {
-            if (columnName == null)
+            if (columnName is null)
             {
-                throw new ArgumentNullException($"{nameof(columnName)} cannot be null.");
+                throw new ArgumentNullException(nameof(columnName));
             }
 
             string columnNameLower = columnName.ToLower();
